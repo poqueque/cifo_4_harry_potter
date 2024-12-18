@@ -1,80 +1,87 @@
 import 'package:flutter/material.dart';
 import 'package:harry_potter/models/character.dart';
+import 'package:harry_potter/widgets/rating.dart';
 
-class CharacterDetail extends StatelessWidget {
+class CharacterDetail extends StatefulWidget {
   const CharacterDetail({super.key, required this.character});
 
   final Character character;
 
   @override
-  Widget build(BuildContext context) {
-    var screenHeight = MediaQuery.of(context).size.height;
+  State<CharacterDetail> createState() => _CharacterDetailState();
+}
 
+class _CharacterDetailState extends State<CharacterDetail> {
+
+  int lastStarClicked = 0;
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Harry Potter App"),
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Hero(
-              tag: character.name,
-              child: Image.network(
-                character.imageUrl,
-                height: screenHeight / 2,
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Hero(
+            tag: widget.character.name,
+            child: Image.network(
+              widget.character.imageUrl,
+            ),
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Rating(value: widget.character.averageRating),
+              Text("${widget.character.reviews} reviews"),
+            ],
+          ),
+          Text(
+            widget.character.name,
+            style: const TextStyle(
+              fontSize: 28,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          Rating(
+            value: lastStarClicked.toDouble(),
+            color: Colors.deepPurple,
+            onValueClicked: (int value) {
+              setState(() {
+                lastStarClicked = value;
+                widget.character.addReview(value);
+              });
+            },
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Column(
+                children: [
+                  const Icon(Icons.fitness_center),
+                  const Text("Força"),
+                  Text("${widget.character.strenght}"),
+                ],
               ),
-            ),
-            const Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Row(
-                  children: [
-                    Icon(Icons.star),
-                    Icon(Icons.star),
-                    Icon(Icons.star),
-                    Icon(Icons.star_border),
-                    Icon(Icons.star_border),
-                  ],
-                ),
-                Text("89 reviews"),
-              ],
-            ),
-            Text(
-              character.name,
-              style: const TextStyle(
-                fontSize: 28,
-                fontWeight: FontWeight.bold,
+              Column(
+                children: [
+                  const Icon(Icons.auto_fix_normal),
+                  const Text("Màgia"),
+                  Text("${widget.character.magic}"),
+                ],
               ),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Column(
-                  children: [
-                    const Icon(Icons.fitness_center),
-                    const Text("Força"),
-                    Text("${character.strenght}"),
-                  ],
-                ),
-                Column(
-                  children: [
-                    const Icon(Icons.auto_fix_normal),
-                    const Text("Màgia"),
-                    Text("${character.magic}"),
-                  ],
-                ),
-                Column(
-                  children: [
-                    const Icon(Icons.speed),
-                    const Text("Velocitat"),
-                    Text("${character.speed}"),
-                  ],
-                ),
-              ],
-            )
-          ],
-        ),
+              Column(
+                children: [
+                  const Icon(Icons.speed),
+                  const Text("Velocitat"),
+                  Text("${widget.character.speed}"),
+                ],
+              ),
+            ],
+          )
+        ],
       ),
     );
   }
