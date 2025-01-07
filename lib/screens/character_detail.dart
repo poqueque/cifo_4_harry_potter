@@ -1,22 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:harry_potter/models/character.dart';
+import 'package:harry_potter/providers/hogwarts_data.dart';
 import 'package:harry_potter/widgets/rating.dart';
+import 'package:provider/provider.dart';
 
 class CharacterDetail extends StatefulWidget {
-  const CharacterDetail({super.key, required this.character});
+  const CharacterDetail({super.key, required this.id});
 
-  final Character character;
+  final int id;
 
   @override
   State<CharacterDetail> createState() => _CharacterDetailState();
 }
 
 class _CharacterDetailState extends State<CharacterDetail> {
-
   int lastStarClicked = 0;
 
   @override
   Widget build(BuildContext context) {
+    HogwartsData hogwartsData = context.read<HogwartsData>();
+    Character character = hogwartsData.getCharacterById(widget.id);
+
     return Scaffold(
       appBar: AppBar(
         title: const Text("Harry Potter App"),
@@ -26,20 +30,34 @@ class _CharacterDetailState extends State<CharacterDetail> {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Hero(
-            tag: widget.character.name,
+            tag: character.name,
             child: Image.network(
-              widget.character.imageUrl,
+              character.imageUrl,
             ),
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              Rating(value: widget.character.averageRating),
-              Text("${widget.character.reviews} reviews"),
+              Rating(value: character.averageRating),
+              Text("${character.reviews} reviews"),
+              InkWell(
+                onTap: () {
+                  hogwartsData.toggleFavorite(character.id);
+                },
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Consumer<HogwartsData>(
+                      builder: (context, hogwartsData, child) {
+                    return Icon(character.favorite
+                        ? Icons.favorite
+                        : Icons.favorite_border);
+                  }),
+                ),
+              )
             ],
           ),
           Text(
-            widget.character.name,
+            character.name,
             style: const TextStyle(
               fontSize: 28,
               fontWeight: FontWeight.bold,
@@ -51,7 +69,7 @@ class _CharacterDetailState extends State<CharacterDetail> {
             onValueClicked: (int value) {
               setState(() {
                 lastStarClicked = value;
-                widget.character.addReview(value);
+                hogwartsData.addReview(character.id, value);
               });
             },
           ),
@@ -62,21 +80,21 @@ class _CharacterDetailState extends State<CharacterDetail> {
                 children: [
                   const Icon(Icons.fitness_center),
                   const Text("Força"),
-                  Text("${widget.character.strenght}"),
+                  Text("${character.strenght}"),
                 ],
               ),
               Column(
                 children: [
                   const Icon(Icons.auto_fix_normal),
                   const Text("Màgia"),
-                  Text("${widget.character.magic}"),
+                  Text("${character.magic}"),
                 ],
               ),
               Column(
                 children: [
                   const Icon(Icons.speed),
                   const Text("Velocitat"),
-                  Text("${widget.character.speed}"),
+                  Text("${character.speed}"),
                 ],
               ),
             ],
