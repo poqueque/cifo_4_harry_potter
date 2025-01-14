@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:harry_potter/providers/hogwarts_data.dart';
 import 'package:harry_potter/screens/character_list.dart';
+import 'package:harry_potter/services/database.dart';
 import 'package:harry_potter/services/preferences.dart';
+import 'package:provider/provider.dart';
 
 class Splash extends StatefulWidget {
   const Splash({super.key});
@@ -24,6 +27,14 @@ class _SplashState extends State<Splash> {
     setState(() {});
     await Preferences.instance.init();
     status = "Preferències carregades";
+    setState(() {});
+    await Database.instance.init();
+    status = "Base de dades inicialitzada";
+    setState(() {});
+    if (!mounted) return;
+    HogwartsData hogwartsData = context.read<HogwartsData>();
+    await hogwartsData.init();
+    status = "Dades carregades";
     setState(() {});
     await Future.delayed(const Duration(seconds: 1));
     if (!mounted) return;

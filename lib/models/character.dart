@@ -1,25 +1,27 @@
+import 'package:isar/isar.dart';
+
+part 'character.g.dart';
+
+@collection
 class Character {
-  final int id;
+  Id id = Isar.autoIncrement;
   final String name;
   final String imageUrl;
   final int strenght;
   final int magic;
   final int speed;
-  int _reviews = 0;
-  int _totalStars = 0;
+  int reviews = 0;
+  int totalStars = 0;
   bool favorite = false;
 
-  int get reviews => _reviews;
-
-  double get averageRating => (_reviews == 0) ? 0 : _totalStars / _reviews;
+  double get averageRating => (reviews == 0) ? 0 : totalStars / reviews;
 
   void addReview(int value) {
-    _reviews++;
-    _totalStars = _totalStars + value;
+    reviews++;
+    totalStars = totalStars + value;
   }
 
   Character({
-    required this.id,
     required this.name,
     required this.imageUrl,
     required this.strenght,
