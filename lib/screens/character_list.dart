@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:harry_potter/providers/hogwarts_data.dart';
 import 'package:harry_potter/screens/character_detail.dart';
 import 'package:harry_potter/services/preferences.dart';
@@ -18,10 +19,11 @@ class CharacterList extends StatefulWidget {
 class _CharacterListState extends State<CharacterList> {
   @override
   Widget build(BuildContext context) {
+    var l = AppLocalizations.of(context)!;
     return Scaffold(
       appBar: widget.isNarrow
           ? AppBar(
-              title: const Text("Welcome to Hogwarts"),
+              title: Text(l.appBarText),
               actions: [
                 Switch(
                   value: Preferences.instance.getShowSubtitles(),
@@ -47,7 +49,7 @@ class _CharacterListState extends State<CharacterList> {
                 ),
                 title: Text(character.name),
                 subtitle: Preferences.instance.getShowSubtitles()
-                    ? Text("${character.reviews} reviews")
+                    ? Text(l.nReviews(character.reviews))
                     : null,
                 onTap: () {
                   if (widget.onCharacterTapped == null) {
@@ -72,7 +74,7 @@ class _CharacterListState extends State<CharacterList> {
                         : Icons.favorite_border),
                   ),
                 ),
-              )
+              ),
           ],
         );
       }),

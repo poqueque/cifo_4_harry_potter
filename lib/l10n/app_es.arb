@@ -1,0 +1,8 @@
+{
+    "appBarText": "Bienvenidos a Hogwarts",
+    "strenght": "Fuerza",
+    "magic": "Magia",
+    "speed": "Velocidad",
+    "characterDetails": "Detalles de {character}",
+    "nReviews": "{count, plural, =0{no hay reseñas} =1{1 reseña} other{{count} reseñas}}"
+}

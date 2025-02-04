@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:harry_potter/screens/character_detail.dart';
 import 'package:harry_potter/screens/character_list.dart';
 import 'package:harry_potter/services/preferences.dart';
@@ -15,9 +16,10 @@ class _WidePageState extends State<WidePage> {
 
   @override
   Widget build(BuildContext context) {
+    var l = AppLocalizations.of(context)!;
     return Scaffold(
         appBar: AppBar(
-          title: const Text("Welcome to Hogwarts"),
+          title: Text(l.appBarText),
           actions: [
             Switch(
               value: Preferences.instance.getShowSubtitles(),

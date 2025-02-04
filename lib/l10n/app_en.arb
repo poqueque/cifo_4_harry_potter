@@ -1,0 +1,25 @@
+{
+    "appBarText": "Welcome to Hogwarts",
+    "@appBarText": {
+        "description": "The text that appears in the App Bar"
+    },
+    "strenght": "Strenght",
+    "magic": "Magic",
+    "speed": "Speed",
+    "characterDetails": "{character} details",
+    "@characterDetails": {
+        "placeholders": {
+            "character": {
+                "type": "String"
+            }
+        }
+    },
+    "nReviews": "{count, plural, =0{no reviews} =1{1 review} other{{count} reviews}}",
+    "@nReviews": {
+        "placeholders": {
+            "count": {
+                "type": "int"
+            }
+        }
+    }
+}
