@@ -5,7 +5,11 @@ import 'package:harry_potter/services/preferences.dart';
 import 'package:provider/provider.dart';
 
 class CharacterList extends StatefulWidget {
-  const CharacterList({super.key});
+  const CharacterList(
+      {super.key, this.isNarrow = true, this.onCharacterTapped});
+
+  final bool isNarrow;
+  final Function(int)? onCharacterTapped;
 
   @override
   State<CharacterList> createState() => _CharacterListState();
@@ -15,18 +19,20 @@ class _CharacterListState extends State<CharacterList> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Welcome to Hogwarts"),
-        actions: [
-          Switch(
-            value: Preferences.instance.getShowSubtitles(),
-            onChanged: (value) {
-              Preferences.instance.setShowSubtitles(value);
-              setState(() {});
-            },
-          )
-        ],
-      ),
+      appBar: widget.isNarrow
+          ? AppBar(
+              title: const Text("Welcome to Hogwarts"),
+              actions: [
+                Switch(
+                  value: Preferences.instance.getShowSubtitles(),
+                  onChanged: (value) {
+                    Preferences.instance.setShowSubtitles(value);
+                    setState(() {});
+                  },
+                )
+              ],
+            )
+          : null,
       body: Consumer<HogwartsData>(builder: (context, hogwartsData, child) {
         return ListView(
           children: [
@@ -44,12 +50,16 @@ class _CharacterListState extends State<CharacterList> {
                     ? Text("${character.reviews} reviews")
                     : null,
                 onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => CharacterDetail(id: character.id),
-                    ),
-                  );
+                  if (widget.onCharacterTapped == null) {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => CharacterDetail(id: character.id),
+                      ),
+                    );
+                  } else {
+                    widget.onCharacterTapped!(character.id);
+                  }
                 },
                 trailing: InkWell(
                   onTap: () {
