@@ -1,4 +1,4 @@
-package net.poquesoft.harry_potter
+package cat.cifovirtual.hogwarts
 
 import io.flutter.embedding.android.FlutterActivity
 
